@@ -7,6 +7,7 @@ const CandidateSearch = () => {
   const [currentIndex, setCurrentIndex] = useState(0); // To track the current candidate
   const [savedCandidates, setSavedCandidates] = useState<Candidate[]>([]); // To store saved candidates
   const [userDetails, setUserDetails] = useState<any>(null); // To store the detailed user info
+  
 
   useEffect(() => {
     const fetchCandidates = async () => {
@@ -41,10 +42,15 @@ const CandidateSearch = () => {
   };
 
   const handleUserDetails = async (username: string) => {
-    // Fetch additional details about the user when their username is clicked
-    const details = await searchGithubUser(username);
-    setUserDetails(details); // Update state with the detailed user info
+    try {
+      const details = await searchGithubUser(username);
+      console.log('User details response:', details);  // Log the raw response
+      setUserDetails(details); // Update state with the detailed user info
+    } catch (error) {
+      console.error('Error fetching user details:', error);
+    }
   };
+  
 
   if (candidates.length === 0) return <div>Loading...</div>;
 
@@ -54,7 +60,7 @@ const CandidateSearch = () => {
     <div>
       <h1>Candidate Search</h1>
       <div className="candidate-card">
-        <img src={currentCandidate.avatar_url} alt="Avatar" width="100" />
+        <img src={currentCandidate.avatar_url} alt="Avatar" width= '300' />
         <h2 onClick={() => handleUserDetails(currentCandidate.login)}>{currentCandidate.login}</h2> {/* GitHub username */}
         <p>Location: {currentCandidate.location || 'N/A'}</p>
         <p>Email: {currentCandidate.email || 'N/A'}</p>

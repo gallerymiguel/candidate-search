@@ -1,3 +1,6 @@
+const token = import.meta.env.VITE_GITHUB_TOKEN;
+console.log('Token:', token);
+
 const searchGithub = async () => {
   try {
     const start = Math.floor(Math.random() * 100000000) + 1;
