@@ -8,4 +8,6 @@ export interface Candidate {
     html_url: string;          
     bio: string | null;
     company: string | null;   
+    followers: number;
+    following: number;
   }
