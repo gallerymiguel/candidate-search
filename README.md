@@ -2,10 +2,11 @@
 # Candidate Search App
 
 ## Overview
-This is a web application that allows users to search for GitHub profiles, and save their favorite candidates. The app fetches data from the GitHub API and displays detailed information about candidates, including their avatar, name, email, company, bio, and location.
+This is a web application that allows users to search for GitHub profiles, filter them based on certain criteria, and save their favorite candidates. The app fetches data from the GitHub API and displays detailed information about candidates, including their avatar, name, email, company, bio, and location.
 
 ## Features
 - **Search GitHub Profiles**: Search through GitHub profiles based on a specific query.
+- **Filter Candidates**: Automatically filters profiles based on the presence of an email, location, and bio.
 - **Save Candidates**: Save profiles that meet the criteria to a local storage.
 - **Profile Details**: View detailed information about a candidate by clicking on their name.
 
@@ -14,6 +15,18 @@ This is a web application that allows users to search for GitHub profiles, and s
 - **TypeScript**: The app is written in TypeScript for type safety.
 - **GitHub API**: Fetches data from the GitHub API to display profile information.
 - **Local Storage**: Candidate profiles are saved locally in the browser.
+
+
+## Deployed Application
+
+You can view the live version of the application at [https://render.com/](https://candidate-search-kx1t.onrender.com/).
+
+## Screenshots
+
+![Screenshot](/02-Challenge/candidate-search/public/CandidateSearch.jpg) 
+
+![Screenshot](/02-Challenge/candidate-search/public/SavedSearch.jpg)
+
 
 ## Installation
 
@@ -34,11 +47,12 @@ To run this project locally:
    npm start
    ```
 
-The app should now be running at `http://localhost:3000`.
+The app should now be running at `http://localhost:5173/`.
 
 ## Usage
 
 1. **Search**: Enter a username or keyword to search for GitHub profiles.
+2. **Filter**: The app automatically filters profiles based on email, location, and bio.
 3. **Save**: Click the "+" button to save a profile.
 4. **View Details**: Click on a candidate's name to view more detailed information.
 
