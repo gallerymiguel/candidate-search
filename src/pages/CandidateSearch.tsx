@@ -8,7 +8,7 @@ const CandidateSearch = () => {
   const [savedCandidates, setSavedCandidates] = useState<Candidate[]>([]);
   const [userDetails, setUserDetails] = useState<Candidate | null>(null);
 
-  useEffect(() => {
+  useEffect(() => {  // Fetch candidates and saved candidates from local storage
     const fetchCandidates = async () => {
       try {
         const data = await searchGithub();
@@ -26,7 +26,7 @@ const CandidateSearch = () => {
     fetchCandidates();
   }, []);
 
-  useEffect(() => {
+  useEffect(() => {  
     // Automatically fetch user details when current candidate changes
     if (candidates[currentIndex]) {
       handleUserDetails(candidates[currentIndex].login);
@@ -37,7 +37,7 @@ const CandidateSearch = () => {
     setCurrentIndex((prevIndex) => (prevIndex + 1) % candidates.length);
   };
 
-  const handlePlus = async () => {
+  const handlePlus = async () => {  // Save candidate to local storage
     const candidateToSave = candidates[currentIndex];
     try {
       const detailedCandidate = await searchGithubUser(candidateToSave.login);
@@ -52,7 +52,7 @@ const CandidateSearch = () => {
   };
   
 
-  const handleUserDetails = async (username: string) => {
+  const handleUserDetails = async (username: string) => {  // Fetch user details from GitHub API
     try {
       const details = await searchGithubUser(username);
       console.log('Fetched user details:', details);
@@ -66,7 +66,7 @@ const CandidateSearch = () => {
 
   const currentCandidate = candidates[currentIndex];
 
-  return (
+  return (  // Display candidate details and actions
     <div>
       <h1>Candidate Search</h1>
       <div className="candidate-card">
@@ -78,7 +78,7 @@ const CandidateSearch = () => {
         <p>Email: {currentCandidate.email || 'N/A'}</p>
         <p>Company: {currentCandidate.company || 'N/A'}</p> */}
 
-        {userDetails && (
+        {userDetails && (  // Display user details if available
           <div className="user-details">
             <p>Email: {userDetails.email || 'N/A'}</p>
             <p>Company: {userDetails.company || 'N/A'}</p>
@@ -88,8 +88,8 @@ const CandidateSearch = () => {
         )}
         </div>
 
-        <div className="actions">
-          <button className='red' onClick={handleMinus}>-</button>
+        <div className="actions">  {/* Action buttons */}
+          <button className='red' onClick={handleMinus}>-</button>  
           <button className='green' onClick={handlePlus}>+</button>
       </div>
     </div>
