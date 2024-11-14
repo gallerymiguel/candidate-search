@@ -45,3 +45,4 @@ const searchGithubUser = async (username: string) => {
 };
 
 export { searchGithub, searchGithubUser };
+

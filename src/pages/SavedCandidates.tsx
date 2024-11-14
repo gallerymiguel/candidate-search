@@ -22,7 +22,7 @@ const SavedCandidates = () => {
   }
 
   return (
-    <div>
+    <div className='saved-candidates-container'>
       <h1>Saved Candidates</h1>
       <div className="table">
         <table>
@@ -40,14 +40,14 @@ const SavedCandidates = () => {
           <tbody>
             {savedCandidates.map((candidate, index) => (
               <tr key={candidate.login}>
-                <td><img src={candidate.avatar_url} alt="Avatar" width="50" /></td>
+                <td><img src={candidate.avatar_url} alt="Avatar" width="100" /></td>
                 <td>{candidate.login}</td>
                 <td>{candidate.location || 'N/A'}</td>
                 <td>{candidate.email || 'N/A'}</td>
                 <td>{candidate.company || 'N/A'}</td>
                 <td>{candidate.bio || 'No bio provided'}</td>
                 <td>
-                  <button onClick={() => handleRemove(index)}>-</button>  {/* Reject button */}
+                  <button className='red' onClick={() => handleRemove(index)}>-</button>  {/* Reject button */}
                 </td>
               </tr>
             ))}
