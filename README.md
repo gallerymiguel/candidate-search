@@ -23,9 +23,9 @@ https://candidate-search-kx1t.onrender.com/
 
 ## Screenshots
 
-![Screenshot](/candidate-search/public/CandidateSearch.jpg) 
+![Screenshot](/public/CandidateSearch.jpg) 
 
-![Screenshot](/candidate-search/public/SavedSearch.jpg)
+![Screenshot](/public/SavedSearch.jpg)
 
 
 ## Installation
