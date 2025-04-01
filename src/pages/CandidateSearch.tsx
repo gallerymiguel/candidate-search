@@ -1,6 +1,7 @@
-import { useState, useEffect } from 'react';
-import { searchGithub, searchGithubUser } from '../api/API';
-import { Candidate } from '../interfaces/Candidate.interface';
+import { useState, useEffect } from "react";
+import { searchGithub, searchGithubUser } from "../api/API";
+import { Candidate } from "../interfaces/Candidate.interface";
+import { FaGithub } from "react-icons/fa";
 
 const CandidateSearch = () => {
   const [candidates, setCandidates] = useState<Candidate[]>([]);
@@ -8,89 +9,119 @@ const CandidateSearch = () => {
   const [savedCandidates, setSavedCandidates] = useState<Candidate[]>([]);
   const [userDetails, setUserDetails] = useState<Candidate | null>(null);
 
-  useEffect(() => {  // Fetch candidates and saved candidates from local storage
-    const fetchCandidates = async () => {
+  // Load initial data on mount
+  useEffect(() => {
+    const loadCandidates = async () => {
       try {
         const data = await searchGithub();
         setCandidates(data);
-      } catch (error) {
-        console.error("Failed to fetch candidates:", error);
+      } catch (err) {
+        console.error("Failed to fetch candidates:", err);
       }
     };
 
-    const saved = localStorage.getItem('savedCandidates');
-    if (saved) {
-      setSavedCandidates(JSON.parse(saved));
+    const stored = localStorage.getItem("savedCandidates");
+    if (stored) {
+      setSavedCandidates(JSON.parse(stored));
     }
 
-    fetchCandidates();
+    loadCandidates();
   }, []);
 
-  useEffect(() => {  
-    // Automatically fetch user details when current candidate changes
+  // Load user details whenever the current candidate changes
+  useEffect(() => {
     if (candidates[currentIndex]) {
-      handleUserDetails(candidates[currentIndex].login);
+      fetchUserDetails(candidates[currentIndex].login);
     }
-  }, [currentIndex, candidates]); // Dependency on currentIndex and candidates array
+  }, [currentIndex, candidates]);
 
-  const handleMinus = () => {
-    setCurrentIndex((prevIndex) => (prevIndex + 1) % candidates.length);
-  };
-
-  const handlePlus = async () => {  // Save candidate to local storage
-    const candidateToSave = candidates[currentIndex];
-    try {
-      const detailedCandidate = await searchGithubUser(candidateToSave.login);
-      const updatedSavedCandidates = [...savedCandidates, detailedCandidate];
-      setSavedCandidates(updatedSavedCandidates);
-      localStorage.setItem('savedCandidates', JSON.stringify(updatedSavedCandidates));
-    } catch (error) {
-      console.error("Error fetching detailed candidate info:", error);
-    }
-  
-    setCurrentIndex((prevIndex) => (prevIndex + 1) % candidates.length);
-  };
-  
-
-  const handleUserDetails = async (username: string) => {  // Fetch user details from GitHub API
+  const fetchUserDetails = async (username: string) => {
     try {
       const details = await searchGithubUser(username);
-      console.log('Fetched user details:', details);
       setUserDetails(details);
-    } catch (error) {
-      console.error('Error fetching user details:', error);
+    } catch (err) {
+      console.error("Error fetching user details:", err);
     }
+  };
+
+  const handleNext = () => {
+    setCurrentIndex((prev) => (prev + 1) % candidates.length);
+  };
+
+  const handleSave = async () => {
+    const candidate = candidates[currentIndex];
+    try {
+      const detailedCandidate = await searchGithubUser(candidate.login);
+      const updated = [...savedCandidates, detailedCandidate];
+      setSavedCandidates(updated);
+      localStorage.setItem("savedCandidates", JSON.stringify(updated));
+    } catch (err) {
+      console.error("Error saving candidate:", err);
+    }
+
+    handleNext();
   };
 
   if (candidates.length === 0) return <div>Loading...</div>;
 
-  const currentCandidate = candidates[currentIndex];
+  const current = candidates[currentIndex];
 
-  return (  // Display candidate details and actions
+  return (
     <div>
       <h1>Candidate Search</h1>
-      <div className="candidate-card">
-        <img src={currentCandidate.avatar_url} alt="Avatar" width="300" /> 
-        <h2 onClick={() => handleUserDetails(currentCandidate.login)}>
-          {currentCandidate.login}
-        </h2>
-        {/* <p>Location: {currentCandidate.location || 'N/A'}</p>
-        <p>Email: {currentCandidate.email || 'N/A'}</p>
-        <p>Company: {currentCandidate.company || 'N/A'}</p> */}
+      <div
+        key={current.login}
+        className="animate-fadeUp bg-white rounded-xl shadow-md p-6 max-w-md w-full mx-auto mt-8 flex flex-col items-center text-center animate-fade"
+      >
+        <img
+          src={current.avatar_url}
+          alt={`${current.login}'s avatar`}
+          className="w-32 h-32 rounded-full border-4 border-white shadow-lg object-cover mb-4"
+        />
 
-        {userDetails && (  // Display user details if available
-          <div className="user-details">
-            <p>Email: {userDetails.email || 'N/A'}</p>
-            <p>Company: {userDetails.company || 'N/A'}</p>
-            <p>Location: {userDetails.location || 'N/A'}</p>
-            <p>Bio: {userDetails.bio || 'N/A'}</p>
+        <h2 className="text-xl font-semibold text-gray-800 mb-2">
+          <a
+            href={`https://github.com/${current.login}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center justify-center gap-2 text-blue-600 hover:underline"
+          >
+            <FaGithub className="text-lg" />
+            {current.login}
+          </a>
+        </h2>
+
+        {userDetails && (
+          <div className="text-sm text-gray-600 space-y-1">
+            <p>
+              <strong>Email:</strong> {userDetails.email || "N/A"}
+            </p>
+            <p>
+              <strong>Company:</strong> {userDetails.company || "N/A"}
+            </p>
+            <p>
+              <strong>Location:</strong> {userDetails.location || "N/A"}
+            </p>
+            <p>
+              <strong>Bio:</strong> {userDetails.bio || "N/A"}
+            </p>
           </div>
         )}
-        </div>
+      </div>
 
-        <div className="actions">  {/* Action buttons */}
-          <button className='red' onClick={handleMinus}>-</button>  
-          <button className='green' onClick={handlePlus}>+</button>
+      <div className="actions">
+        <button
+          className="bg-red-500 hover:bg-red-600 text-white px-6 py-2 rounded-lg transition"
+          onClick={handleNext}
+        >
+          ❌ Skip
+        </button>
+        <button
+          className="bg-green-500 hover:bg-green-600 text-white px-6 py-2 rounded-lg transition"
+          onClick={handleSave}
+        >
+          ✅ Save
+        </button>
       </div>
     </div>
   );

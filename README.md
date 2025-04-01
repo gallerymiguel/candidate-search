@@ -21,6 +21,7 @@ This is a web application that allows users to search for GitHub profiles, filte
 
 You can view the live version of the application at [https://render.com/](https://candidate-search-kx1t.onrender.com/).
 
+
 ## Screenshots
 
 ![Screenshot](/02-Challenge/candidate-search/public/CandidateSearch.jpg) 
